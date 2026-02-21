@@ -49,6 +49,18 @@
                     </TextBlock>
                 </StackPanel>
 
+                <!-- Data Directory section -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Data Directory"
+                               FontWeight="SemiBold" FontSize="14"/>
+                    <TextBlock Foreground="#47516b" FontSize="12" TextWrapping="Wrap">
+                        Open the folder where Tempyr stores its settings and log file.
+                    </TextBlock>
+                    <Button Classes="outlined" Content="Open Data Directory"
+                            Command="{Binding OpenDataDirectoryCommand}"
+                            Padding="14,8" Margin="0,4,0,0"/>
+                </StackPanel>
+
             </StackPanel>
         </ScrollViewer>
 

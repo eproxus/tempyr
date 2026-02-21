@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Tempyr.Services;
 
 namespace Tempyr.ViewModels;
@@ -17,6 +19,16 @@ public partial class SettingsViewModel : ViewModelBase
     {
         _settings    = settings;
         _installPath = settings.HytaleInstallPath ?? string.Empty;
+    }
+
+    private static readonly string DataDirectory = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Tempyr");
+
+    [RelayCommand]
+    private void OpenDataDirectory()
+    {
+        Directory.CreateDirectory(DataDirectory);
+        Process.Start(new ProcessStartInfo(DataDirectory) { UseShellExecute = true });
     }
 
     /// <summary>Called from the view's code-behind after a folder picker resolves.</summary>
