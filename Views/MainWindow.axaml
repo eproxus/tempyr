@@ -70,8 +70,10 @@
                 </Button>
 
                 <!-- Version footer -->
-                <TextBlock DockPanel.Dock="Bottom" Text="v0.1.0-alpha"
+                <TextBlock DockPanel.Dock="Bottom" Text="{Binding VersionText}"
                            Foreground="#47516b" FontSize="11"
+                           TextTrimming="CharacterEllipsis"
+                           ToolTip.Tip="{Binding VersionText}"
                            Margin="20,12,20,16"/>
 
                 <!-- Settings button (bottom) -->

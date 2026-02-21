@@ -11,7 +11,18 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
     <PublishTrimmed>true</PublishTrimmed>
+    <Version>0.2.0-alpha</Version>
   </PropertyGroup>
+
+  <!-- Embed short git hash into InformationalVersion via SourceRevisionId -->
+  <Target Name="SetGitHash" BeforeTargets="InitializeSourceControlInformation" Condition="'$(DesignTimeBuild)' != 'true'">
+    <Exec Command="git rev-parse --short HEAD" ConsoleToMSBuild="true" StandardOutputImportance="low" IgnoreExitCode="true">
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitHash" />
+    </Exec>
+    <PropertyGroup Condition="'$(GitHash)' != ''">
+      <SourceRevisionId>$(GitHash)</SourceRevisionId>
+    </PropertyGroup>
+  </Target>
 
   <ItemGroup>
     <Folder Include="Models\" />
