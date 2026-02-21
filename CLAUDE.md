@@ -15,9 +15,11 @@ dotnet build
 # Run
 dotnet run
 
-# Publish (self-contained)
-dotnet publish -c Release -r win-x64 --self-contained
+# Publish (single-file, trimmed, self-contained)
+dotnet publish -c Release
 ```
+
+Publish defaults are set in the csproj (`PublishSingleFile`, `SelfContained`, `PublishTrimmed`, etc.) — no extra flags needed.
 
 There are no tests at this time.
 
@@ -41,7 +43,7 @@ Common types: `feat`, `fix`, `refactor`, `docs`, `chore`, `style`, `test`, `buil
 
 ## Architecture
 
-The app follows strict MVVM. Navigation is ViewModel-first: `MainWindowViewModel` owns page VMs (`InstalledModsPage`, `SettingsPage`) and exposes `CurrentPage`. The `ViewLocator` maps `FooViewModel` → `Tempyr.Views.FooView` by string replacement, so every ViewModel must have a matching View in the same namespace structure.
+The app follows strict MVVM. Navigation is ViewModel-first: `MainWindowViewModel` owns page VMs (`InstalledModsPage`, `SettingsPage`) and exposes `CurrentPage`. The `ViewLocator` maps ViewModel types → View instances via an explicit dictionary (not reflection). When adding a new page, register it in the `Map` dictionary in `ViewLocator.cs`.
 
 **Data flow for the installed mods list:**
 
@@ -58,6 +60,13 @@ The app follows strict MVVM. Navigation is ViewModel-first: `MainWindowViewModel
   <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
   ```
 - Target is `net10.0-windows` (required for `Microsoft.Win32.Registry`).
+
+**Trimming & single-file publish:**
+
+The csproj sets `PublishTrimmed=true` and `PublishSingleFile=true` by default. This requires trim-safe code:
+- **JSON serialization** must use the source-generated `AppJsonContext` (`Services/AppJsonContext.cs`), not `JsonSerializer.Serialize<T>`/`Deserialize<T>`. Add new serialized types as `[JsonSerializable(typeof(...))]` attributes on the context.
+- **ViewLocator** uses an explicit type → factory dictionary instead of reflection. New pages must be added to the `Map` in `ViewLocator.cs`.
+- Avoid `Type.GetType()`, `Activator.CreateInstance()`, and other reflection patterns that the trimmer cannot analyze.
 
 **Hytale install detection** (`InstallationDetector`):
 - Primary: `HKCU\SOFTWARE\Hypixel Studios\Hytale` → `GameInstallPath`

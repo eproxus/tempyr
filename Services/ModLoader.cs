@@ -9,11 +9,6 @@ public static partial class ModLoader
 {
     private static readonly string[] SupportedExtensions = [".jar", ".zip"];
 
-    private static readonly JsonSerializerOptions JsonOptions = new()
-    {
-        PropertyNameCaseInsensitive = true,
-    };
-
     // Fallback filename parser — used only when no manifest.json is present.
     [GeneratedRegex(@"^(?<name>.+?)[\-_ ]v?(?<version>\d+[\d.\-]*)(\s.*)?$", RegexOptions.Compiled)]
     private static partial Regex VersionRegex();
@@ -87,7 +82,7 @@ public static partial class ModLoader
             if (entry is null) return null;
 
             using var stream = entry.Open();
-            return JsonSerializer.Deserialize<ModManifest>(stream, JsonOptions);
+            return JsonSerializer.Deserialize(stream, AppJsonContext.Default.ModManifest);
         }
         catch { return null; }
     }

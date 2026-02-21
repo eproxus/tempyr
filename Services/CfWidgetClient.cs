@@ -17,7 +17,7 @@ public static class CfWidgetClient
         string cfSlug, CancellationToken ct = default)
     {
         var url      = $"{BaseUrl}/hytale/mods/{Uri.EscapeDataString(cfSlug)}";
-        var response = await Http.GetFromJsonAsync<CfWidgetResponse>(url, ct);
+        var response = await Http.GetFromJsonAsync(url, AppJsonContext.Default.CfWidgetResponse, ct);
         var file     = response?.Download;
         if (file is null) return null;
 
@@ -40,20 +40,21 @@ public static class CfWidgetClient
         return $"https://mediafilez.forgecdn.net/files/{part1}/{part2}/{fileName}";
     }
 
-    // ── Private JSON models ───────────────────────────────────────────────────
+}
 
-    private class CfWidgetResponse
-    {
-        [JsonPropertyName("download")] public CfWidgetFile? Download { get; init; }
-    }
+// ── JSON models (internal for source-gen trim safety) ───────────────────────
 
-    private class CfWidgetFile
-    {
-        [JsonPropertyName("id")]      public long    Id      { get; init; }
-        [JsonPropertyName("name")]    public string  Name    { get; init; } = string.Empty;
-        [JsonPropertyName("display")] public string  Display { get; init; } = string.Empty;
-        [JsonPropertyName("url")]     public string? Url     { get; init; }
-    }
+internal class CfWidgetResponse
+{
+    [JsonPropertyName("download")] public CfWidgetFile? Download { get; init; }
+}
+
+internal class CfWidgetFile
+{
+    [JsonPropertyName("id")]      public long    Id      { get; init; }
+    [JsonPropertyName("name")]    public string  Name    { get; init; } = string.Empty;
+    [JsonPropertyName("display")] public string  Display { get; init; } = string.Empty;
+    [JsonPropertyName("url")]     public string? Url     { get; init; }
 }
 
 public record ModLatestFile(string FileName, string DisplayName, string? DownloadUrl);

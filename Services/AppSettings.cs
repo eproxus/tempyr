@@ -17,7 +17,7 @@ public class AppSettings
             if (File.Exists(SettingsPath))
             {
                 var json = File.ReadAllText(SettingsPath);
-                return JsonSerializer.Deserialize<AppSettings>(json) ?? new AppSettings();
+                return JsonSerializer.Deserialize(json, AppJsonContext.Default.AppSettings) ?? new AppSettings();
             }
         }
         catch { /* corrupt settings — start fresh */ }
@@ -30,10 +30,7 @@ public class AppSettings
         try
         {
             Directory.CreateDirectory(Path.GetDirectoryName(SettingsPath)!);
-            File.WriteAllText(SettingsPath, JsonSerializer.Serialize(this, new JsonSerializerOptions
-            {
-                WriteIndented = true
-            }));
+            File.WriteAllText(SettingsPath, JsonSerializer.Serialize(this, AppJsonContext.Default.AppSettings));
         }
         catch { /* best-effort */ }
     }
