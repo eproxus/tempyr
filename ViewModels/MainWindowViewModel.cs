@@ -40,6 +40,9 @@ public partial class MainWindowViewModel : ViewModelBase
         InstalledModsPage = new InstalledModsViewModel(settings.HytaleInstallPath, settings);
 
         _currentPage = InstalledModsPage;
+
+        // Run an update check on startup (fire-and-forget)
+        InstalledModsPage.CheckForUpdatesCommand.ExecuteAsync(null);
     }
 
     [RelayCommand]
