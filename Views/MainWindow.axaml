@@ -10,6 +10,7 @@
         Title="Tempyr — Hytale Mod Manager"
         Width="1100" Height="700"
         MinWidth="800" MinHeight="520"
+        Background="#121b25"
         WindowStartupLocation="CenterScreen">
 
     <Design.DataContext>
@@ -21,29 +22,35 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Margin" Value="8,0"/>
+            <Setter Property="Foreground" Value="#47516b"/>
         </Style>
         <Style Selector="Button.navItem:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}"/>
+            <Setter Property="Background" Value="#1e2d3d"/>
+            <Setter Property="Foreground" Value="#d2d9e2"/>
+        </Style>
+        <Style Selector="Button.navItem.active">
+            <Setter Property="Foreground" Value="#d2d9e2"/>
         </Style>
         <Style Selector="Button.navItem.active /template/ ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListMediumBrush}"/>
+            <Setter Property="Background" Value="#253a50"/>
+            <Setter Property="Foreground" Value="#d2d9e2"/>
         </Style>
     </Window.Styles>
 
     <Grid ColumnDefinitions="210,*">
 
         <!-- Sidebar -->
-        <Border Grid.Column="0" BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
-                BorderThickness="0,0,1,0">
+        <Border Grid.Column="0" Background="#121b25"
+                BorderBrush="#598ac3" BorderThickness="0,0,1,0">
             <DockPanel LastChildFill="False">
 
                 <!-- App header -->
                 <StackPanel DockPanel.Dock="Top" Margin="20,24,20,20">
                     <TextBlock Text="TEMPYR" FontSize="18" FontWeight="Black"
-                               Foreground="{DynamicResource SystemAccentColor}"
+                               Foreground="{StaticResource TempyrAccentBrush}"
                                LetterSpacing="3"/>
                     <TextBlock Text="Hytale Mod Manager" FontSize="11"
-                               Opacity="0.55" Margin="0,4,0,0"/>
+                               Foreground="#47516b" Margin="0,4,0,0"/>
                 </StackPanel>
 
                 <!-- Nav items -->
@@ -64,7 +71,7 @@
 
                 <!-- Version footer -->
                 <TextBlock DockPanel.Dock="Bottom" Text="v0.1.0-alpha"
-                           Opacity="0.35" FontSize="11"
+                           Foreground="#47516b" FontSize="11"
                            Margin="20,0,20,16"/>
 
                 <!-- Settings button (bottom) -->

@@ -4,15 +4,106 @@
              xmlns:local="using:Tempyr"
              xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              RequestedThemeVariant="Dark">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
-  
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="TempyrNavyBrush" Color="#121b25"/>
+            <SolidColorBrush x:Key="TempyrSidebarBrush" Color="#121b25"/>
+            <SolidColorBrush x:Key="TempyrSurfaceBrush" Color="#192430"/>
+            <SolidColorBrush x:Key="TempyrControlBrush" Color="#1a2835"/>
+            <SolidColorBrush x:Key="TempyrBorderBrush" Color="#598ac3"/>
+            <SolidColorBrush x:Key="TempyrAccentBrush" Color="#4669a9"/>
+            <SolidColorBrush x:Key="TempyrAmberBrush" Color="#e8a838"/>
+            <SolidColorBrush x:Key="TempyrMutedTextBrush" Color="#47516b"/>
+        </ResourceDictionary>
+    </Application.Resources>
+
     <Application.Styles>
-        <FluentTheme />
+        <FluentTheme>
+            <FluentTheme.Palettes>
+                <ColorPaletteResources x:Key="Dark"
+                    Accent="#4669a9"
+                    RegionColor="#121b25"
+                    AltHigh="#000000"
+                    AltLow="#000000"
+                    AltMedium="#000000"
+                    AltMediumHigh="#000000"
+                    AltMediumLow="#000000"
+                    BaseHigh="#d2d9e2"
+                    BaseLow="#598ac3"
+                    BaseMedium="#47516b"
+                    BaseMediumHigh="#d2d9e2"
+                    BaseMediumLow="#47516b"
+                    ChromeAltLow="#d2d9e2"
+                    ChromeBlackHigh="#000000"
+                    ChromeBlackLow="#d2d9e2"
+                    ChromeBlackMedium="#000000"
+                    ChromeBlackMediumLow="#121b25"
+                    ChromeDisabledHigh="#598ac3"
+                    ChromeDisabledLow="#47516b"
+                    ChromeHigh="#598ac3"
+                    ChromeLow="#121b25"
+                    ChromeMedium="#172230"
+                    ChromeMediumLow="#1e2d3d"
+                    ChromeWhite="#d2d9e2"
+                    ListLow="#1e2d3d"
+                    ListMedium="#253a50"/>
+            </FluentTheme.Palettes>
+        </FluentTheme>
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
         <mi:MaterialIconStyles/>
+
+        <!-- DataGrid column headers -->
+        <Style Selector="DataGridColumnHeader">
+            <Setter Property="Background" Value="#1e2d3d"/>
+            <Setter Property="Foreground" Value="#d2d9e2"/>
+            <Setter Property="SeparatorBrush" Value="#598ac3"/>
+        </Style>
+        <Style Selector="DataGridColumnHeader:pointerover">
+            <Setter Property="Background" Value="#2d4560"/>
+        </Style>
+        <Style Selector="DataGridColumnHeader:pressed">
+            <Setter Property="Background" Value="#334e6c"/>
+        </Style>
+
+        <!-- Primary button: solid fill -->
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#4669a9"/>
+            <Setter Property="Foreground" Value="#d2d9e2"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+        <Style Selector="Button.primary:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#5479b9"/>
+            <Setter Property="Foreground" Value="#d2d9e2"/>
+        </Style>
+        <Style Selector="Button.primary:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="#3d5e99"/>
+            <Setter Property="Foreground" Value="#d2d9e2"/>
+        </Style>
+
+        <!-- Outlined button: transparent with thin border -->
+        <Style Selector="Button.outlined">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#d2d9e2"/>
+            <Setter Property="BorderBrush" Value="#598ac3"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <Style Selector="Button.outlined:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#1e2d3d"/>
+            <Setter Property="BorderBrush" Value="#6a9ad3"/>
+            <Setter Property="Foreground" Value="#d2d9e2"/>
+        </Style>
+        <Style Selector="Button.outlined:pressed /template/ ContentPresenter">
+            <Setter Property="Background" Value="#253a50"/>
+            <Setter Property="BorderBrush" Value="#7aaae3"/>
+            <Setter Property="Foreground" Value="#d2d9e2"/>
+        </Style>
     </Application.Styles>
 </Application>
