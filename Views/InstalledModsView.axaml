@@ -46,7 +46,7 @@
                                 <TextBlock Text="Update All" VerticalAlignment="Center"/>
                             </StackPanel>
                         </Button>
-                        <Button Classes="primary" Padding="16,8">
+                        <Button x:Name="InstallModButton" Classes="primary" Padding="16,8">
                             <StackPanel Orientation="Horizontal" Spacing="6">
                                 <mi:MaterialIcon Kind="Plus" Width="15" Height="15" VerticalAlignment="Center"/>
                                 <TextBlock Text="Install Mod" VerticalAlignment="Center"/>
@@ -168,6 +168,69 @@
                         Padding="4,2" FontSize="11" VerticalAlignment="Center"/>
             </StackPanel>
         </Border>
+
+        <!-- Install-from-URL overlay -->
+        <Panel IsVisible="{Binding IsInstallOverlayOpen}">
+            <!-- Backdrop -->
+            <Border Background="#AA000000"/>
+
+            <!-- Dialog card -->
+            <Border HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Background="#1a2332" BorderBrush="#598ac3" BorderThickness="1"
+                    CornerRadius="8" Padding="28,24" MinWidth="420" MaxWidth="500"
+                    BoxShadow="0 8 32 0 #CC000000">
+                <StackPanel Spacing="16">
+
+                    <!-- Header -->
+                    <Grid ColumnDefinitions="*,Auto">
+                        <TextBlock Text="Install Mod from CurseForge"
+                                   FontSize="17" FontWeight="SemiBold"/>
+                        <Button Grid.Column="1" Content="✕"
+                                Command="{Binding CloseInstallOverlayCommand}"
+                                IsVisible="{Binding !IsInstalling}"
+                                Padding="4,2" FontSize="11"/>
+                    </Grid>
+
+                    <!-- URL input -->
+                    <TextBox x:Name="InstallUrlTextBox"
+                             Text="{Binding InstallUrl, Mode=TwoWay}"
+                             Watermark="https://www.curseforge.com/hytale/mods/..."
+                             IsEnabled="{Binding !IsInstalling}"/>
+
+                    <!-- Progress bar (visible when downloading) -->
+                    <ProgressBar Value="{Binding InstallProgress}"
+                                 Minimum="0" Maximum="1" Height="6"
+                                 IsVisible="{Binding IsInstalling}"/>
+
+                    <!-- Status message -->
+                    <TextBlock Text="{Binding InstallStatusMessage}"
+                               FontSize="12" Foreground="#47516b"
+                               TextWrapping="Wrap"
+                               IsVisible="{Binding InstallStatusMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"/>
+
+                    <!-- Action buttons -->
+                    <StackPanel Orientation="Horizontal" Spacing="10"
+                                HorizontalAlignment="Right">
+                        <!-- Cancel when idle -->
+                        <Button Content="Cancel"
+                                Command="{Binding CloseInstallOverlayCommand}"
+                                IsVisible="{Binding !IsInstalling}"
+                                Padding="14,8"/>
+                        <!-- Cancel download when installing -->
+                        <Button Content="Cancel Download"
+                                Command="{Binding InstallModCancelCommand}"
+                                IsVisible="{Binding IsInstalling}"
+                                Padding="14,8"/>
+                        <!-- Install -->
+                        <Button Classes="primary" Content="Install"
+                                Command="{Binding InstallModCommand}"
+                                IsVisible="{Binding !IsInstalling}"
+                                Padding="16,8"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+        </Panel>
 
     </Panel>
 </UserControl>

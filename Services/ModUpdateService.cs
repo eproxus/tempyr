@@ -67,6 +67,34 @@ public static class ModUpdateService
         return newFilePath;
     }
 
+    /// <summary>
+    /// Downloads a new mod (fresh install, no backup/archive step).
+    /// Returns the path to the installed file.
+    /// </summary>
+    public static async Task<string> DownloadNewModAsync(
+        string             modsDirectory,
+        string             downloadUrl,
+        string             fileName,
+        IProgress<double>? progress = null,
+        CancellationToken  ct       = default)
+    {
+        Directory.CreateDirectory(modsDirectory);
+
+        var destPath = Path.Combine(modsDirectory, fileName);
+        var tempPath = destPath + ".tmp";
+        try
+        {
+            await DownloadFileAsync(downloadUrl, tempPath, progress, ct);
+            File.Move(tempPath, destPath, overwrite: false);
+            return destPath;
+        }
+        catch
+        {
+            if (File.Exists(tempPath)) File.Delete(tempPath);
+            throw;
+        }
+    }
+
     private static async Task DownloadFileAsync(
         string             url,
         string             destPath,

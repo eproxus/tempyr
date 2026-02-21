@@ -19,6 +19,13 @@ public partial class InstalledModsViewModel : ViewModelBase
     [ObservableProperty] private string            _toastMessage  = string.Empty;
     [ObservableProperty] private bool              _isToastVisible;
 
+    // Install-from-URL overlay state
+    [ObservableProperty] private bool   _isInstallOverlayOpen;
+    [ObservableProperty] private string _installUrl           = string.Empty;
+    [ObservableProperty] private string _installStatusMessage = string.Empty;
+    [ObservableProperty] private bool   _isInstalling;
+    [ObservableProperty] private double _installProgress;
+
     public InstalledModsViewModel(string? installPath, AppSettings settings)
     {
         _settings    = settings;
@@ -140,6 +147,83 @@ public partial class InstalledModsViewModel : ViewModelBase
         var stem  = Path.GetFileNameWithoutExtension(filename);
         var match = FileVersionRegex().Match(stem);
         return match.Success ? match.Groups["ver"].Value : null;
+    }
+
+    // ── Install-from-URL overlay ────────────────────────────────────────────
+
+    [RelayCommand]
+    private void OpenInstallOverlay()
+    {
+        InstallUrl           = string.Empty;
+        InstallStatusMessage = string.Empty;
+        InstallProgress      = 0;
+        IsInstalling         = false;
+        IsInstallOverlayOpen = true;
+    }
+
+    [RelayCommand]
+    private void CloseInstallOverlay() => IsInstallOverlayOpen = false;
+
+    [RelayCommand(IncludeCancelCommand = true)]
+    private async Task InstallMod(CancellationToken ct)
+    {
+        if (string.IsNullOrWhiteSpace(_installPath))
+        {
+            InstallStatusMessage = "Hytale install path is not configured.";
+            return;
+        }
+
+        var slug = ModLoader.ExtractCurseForgeSlug(InstallUrl);
+        if (slug is null)
+        {
+            InstallStatusMessage = "Not a valid CurseForge mod URL.";
+            return;
+        }
+
+        IsInstalling         = true;
+        InstallStatusMessage = "Fetching mod info…";
+        InstallProgress      = 0;
+
+        try
+        {
+            var latest = await CfWidgetClient.GetLatestFileAsync(slug, ct);
+            if (latest is null || string.IsNullOrEmpty(latest.DownloadUrl))
+            {
+                InstallStatusMessage = "Could not find a downloadable file for this mod.";
+                IsInstalling = false;
+                return;
+            }
+
+            var modsDir = Path.Combine(_installPath, "UserData", "Mods");
+            var destPath = Path.Combine(modsDir, latest.FileName);
+            if (File.Exists(destPath))
+            {
+                InstallStatusMessage = $"\"{latest.FileName}\" is already installed.";
+                IsInstalling = false;
+                return;
+            }
+
+            InstallStatusMessage = "Downloading…";
+            var progress = new Progress<double>(p => InstallProgress = p);
+            await ModUpdateService.DownloadNewModAsync(modsDir, latest.DownloadUrl, latest.FileName, progress, ct);
+
+            RefreshModList();
+            IsInstallOverlayOpen = false;
+            ShowToast($"Installed \"{latest.FileName}\" successfully.");
+        }
+        catch (OperationCanceledException)
+        {
+            InstallStatusMessage = "Cancelled.";
+        }
+        catch (Exception ex)
+        {
+            Log.Error("Mod install failed", ex);
+            InstallStatusMessage = $"Download failed: {ex.Message}";
+        }
+        finally
+        {
+            IsInstalling = false;
+        }
     }
 
 }

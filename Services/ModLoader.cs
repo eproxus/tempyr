@@ -104,7 +104,7 @@ public static partial class ModLoader
     private static string Humanize(string s) =>
         s.Replace('_', ' ').Replace('-', ' ').Trim();
 
-    private static string? ExtractCurseForgeSlug(string? url)
+    internal static string? ExtractCurseForgeSlug(string? url)
     {
         if (string.IsNullOrWhiteSpace(url)) return null;
         var m = CurseForgeSlugRegex().Match(url);
