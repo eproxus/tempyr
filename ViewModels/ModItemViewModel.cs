@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Tempyr.Models;
@@ -12,6 +13,10 @@ public partial class ModItemViewModel : ViewModelBase
     public string Name    => Mod.Name;
     public string Version => Mod.Version;
     public string Authors => string.Join(", ", Mod.Authors);
+    public string? CurseForgeUrl => Mod.CurseForgeSlug is not null
+        ? $"https://www.curseforge.com/hytale/mods/{Mod.CurseForgeSlug}"
+        : null;
+    public bool HasCurseForgeUrl => CurseForgeUrl is not null && UpdateStatus != UpdateStatus.NoSource;
 
     // Set by InstalledModsViewModel after a successful update check so this
     // command has the download URL and target filename ready to go.
@@ -24,6 +29,7 @@ public partial class ModItemViewModel : ViewModelBase
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(HasUpdate))]
     [NotifyPropertyChangedFor(nameof(IsDownloading))]
+    [NotifyPropertyChangedFor(nameof(HasCurseForgeUrl))]
     private UpdateStatus _updateStatus = UpdateStatus.Unknown;
 
     [ObservableProperty]
@@ -52,6 +58,15 @@ public partial class ModItemViewModel : ViewModelBase
         OnPropertyChanged(nameof(Name));
         OnPropertyChanged(nameof(Version));
         OnPropertyChanged(nameof(Authors));
+        OnPropertyChanged(nameof(CurseForgeUrl));
+        OnPropertyChanged(nameof(HasCurseForgeUrl));
+    }
+
+    [RelayCommand]
+    private void OpenCurseForge()
+    {
+        if (CurseForgeUrl is null) return;
+        Process.Start(new ProcessStartInfo(CurseForgeUrl) { UseShellExecute = true });
     }
 
     [RelayCommand]

@@ -77,10 +77,22 @@
                     <DataGridTemplateColumn Header="Name" Width="*" MinWidth="80">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate x:DataType="vm:ModItemViewModel">
-                                <TextBlock Text="{Binding Name}"
-                                           FontWeight="SemiBold"
-                                           VerticalAlignment="Center"
-                                           Margin="12,0"/>
+                                <Panel Margin="12,0" VerticalAlignment="Center">
+                                    <!-- Clickable link when mod has a CurseForge slug -->
+                                    <Button Command="{Binding OpenCurseForgeCommand}"
+                                            IsVisible="{Binding HasCurseForgeUrl}"
+                                            Background="Transparent" BorderThickness="0"
+                                            Padding="0" Cursor="Hand">
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#598ac3"
+                                                   TextDecorations="Underline"/>
+                                    </Button>
+                                    <!-- Plain text when no CurseForge slug -->
+                                    <TextBlock Text="{Binding Name}"
+                                               FontWeight="SemiBold"
+                                               IsVisible="{Binding !HasCurseForgeUrl}"/>
+                                </Panel>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
