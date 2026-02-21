@@ -1,0 +1,56 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Tempyr.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="880" d:DesignHeight="700"
+             x:Class="Tempyr.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Header -->
+        <Border Grid.Row="0" Padding="24,18,24,18"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                BorderThickness="0,0,0,1">
+            <TextBlock Text="Settings" FontSize="20" FontWeight="SemiBold"/>
+        </Border>
+
+        <!-- Content -->
+        <ScrollViewer Grid.Row="1" Padding="24,20">
+            <StackPanel Spacing="24" MaxWidth="600" HorizontalAlignment="Left">
+
+                <!-- Installation Path section -->
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Hytale Installation Directory"
+                               FontWeight="SemiBold" FontSize="14"/>
+                    <TextBlock Opacity="0.55" FontSize="12" TextWrapping="Wrap">
+                        Path to the folder containing Hytale.exe.
+                        Tempyr uses this to read and manage your mods.
+                    </TextBlock>
+
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,4,0,0">
+                        <TextBox Grid.Column="0"
+                                 Text="{Binding InstallPath}"
+                                 Watermark="Not configured — click Browse to locate"
+                                 IsReadOnly="True"
+                                 VerticalContentAlignment="Center"/>
+                        <Button Grid.Column="1" x:Name="BrowseButton"
+                                Content="Browse…"
+                                Margin="8,0,0,0" Padding="14,8"/>
+                    </Grid>
+
+                    <!-- Validation status -->
+                    <TextBlock FontSize="12" Opacity="0.65">
+                        <TextBlock.Text>
+                            <Binding Path="IsInstallValid"
+                                     StringFormat="Valid install: {0}"/>
+                        </TextBlock.Text>
+                    </TextBlock>
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+
+    </Grid>
+</UserControl>

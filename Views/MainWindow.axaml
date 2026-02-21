@@ -1,0 +1,93 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Tempyr.ViewModels"
+        xmlns:mi="using:Material.Icons.Avalonia"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="1100" d:DesignHeight="700"
+        x:Class="Tempyr.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Title="Tempyr — Hytale Mod Manager"
+        Width="1100" Height="700"
+        MinWidth="800" MinHeight="520"
+        WindowStartupLocation="CenterScreen">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="Button.navItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="8,0"/>
+        </Style>
+        <Style Selector="Button.navItem:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}"/>
+        </Style>
+        <Style Selector="Button.navItem.active /template/ ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListMediumBrush}"/>
+        </Style>
+    </Window.Styles>
+
+    <Grid ColumnDefinitions="210,*">
+
+        <!-- Sidebar -->
+        <Border Grid.Column="0" BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                BorderThickness="0,0,1,0">
+            <DockPanel LastChildFill="False">
+
+                <!-- App header -->
+                <StackPanel DockPanel.Dock="Top" Margin="20,24,20,20">
+                    <TextBlock Text="TEMPYR" FontSize="18" FontWeight="Black"
+                               Foreground="{DynamicResource SystemAccentColor}"
+                               LetterSpacing="3"/>
+                    <TextBlock Text="Hytale Mod Manager" FontSize="11"
+                               Opacity="0.55" Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <!-- Nav items -->
+                <Button Classes="navItem"
+                        Classes.active="{Binding IsInstalledModsActive}"
+                        DockPanel.Dock="Top"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Command="{Binding NavigateToCommand}"
+                        CommandParameter="{Binding InstalledModsPage}"
+                        Padding="22,10">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <mi:MaterialIcon Kind="PackageVariant" Width="16" Height="16"
+                                         VerticalAlignment="Center"/>
+                        <TextBlock Text="Installed Mods" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+                <!-- Version footer -->
+                <TextBlock DockPanel.Dock="Bottom" Text="v0.1.0-alpha"
+                           Opacity="0.35" FontSize="11"
+                           Margin="20,0,20,16"/>
+
+                <!-- Settings button (bottom) -->
+                <Button Classes="navItem"
+                        Classes.active="{Binding IsSettingsActive}"
+                        DockPanel.Dock="Bottom"
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Left"
+                        Command="{Binding NavigateToCommand}"
+                        CommandParameter="{Binding SettingsPage}"
+                        Padding="22,10">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <mi:MaterialIcon Kind="Cog" Width="16" Height="16"
+                                         VerticalAlignment="Center"/>
+                        <TextBlock Text="Settings" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Button>
+
+            </DockPanel>
+        </Border>
+
+        <!-- Page content -->
+        <ContentControl Grid.Column="1" Content="{Binding CurrentPage}"/>
+
+    </Grid>
+</Window>
