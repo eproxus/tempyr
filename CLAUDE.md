@@ -21,6 +21,18 @@ dotnet publish -c Release -r win-x64 --self-contained
 
 There are no tests at this time.
 
+## VCS
+
+This project uses **Jujutsu (jj)** colocated with git. Never use raw git commands — always use `jj`.
+
+```bash
+# Check status
+jj status
+
+# Commit (snapshot the working copy)
+jj commit -m "type(scope): description"
+```
+
 ## Commits
 
 This project uses [Conventional Commits](https://www.conventionalcommits.org/). Format: `type(scope): description`
