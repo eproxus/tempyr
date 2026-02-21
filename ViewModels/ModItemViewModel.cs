@@ -65,6 +65,8 @@ public partial class ModItemViewModel : ViewModelBase
         var progress = new Progress<double>(p => DownloadProgress = p);
         try
         {
+            Log.Info($"Installing update for '{Name}': {LatestFile.FileName} from {LatestFile.DownloadUrl}");
+
             var newPath = await ModUpdateService.DownloadAndInstallAsync(
                 _currentFilePath,
                 LatestFile.DownloadUrl,
@@ -74,6 +76,8 @@ public partial class ModItemViewModel : ViewModelBase
 
             ReloadFromFile(newPath);
             UpdateStatus = UpdateStatus.UpToDate;
+
+            Log.Info($"Update installed for '{Name}': new file at {newPath}.");
         }
         catch (OperationCanceledException)
         {

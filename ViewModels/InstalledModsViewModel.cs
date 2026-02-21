@@ -57,10 +57,15 @@ public partial class InstalledModsViewModel : ViewModelBase
         RefreshModList();
 
         var targets = Mods.Where(m => m.Mod.CurseForgeSlug is not null).ToList();
+        Log.Info($"Update check started for {targets.Count} mod(s) ({Mods.Count} total loaded).");
+
         await Task.WhenAll(targets.Select(m => CheckModAsync(m, ct)));
 
         var updates = targets.Count(m => m.UpdateStatus == UpdateStatus.UpdateAvailable);
-        var errors  = targets.Count(m => m.UpdateStatus == UpdateStatus.Error);
+        var upToDate = targets.Count(m => m.UpdateStatus == UpdateStatus.UpToDate);
+        var errors  = targets.Count(m => m.UpdateStatus is UpdateStatus.Error or UpdateStatus.NoSource);
+
+        Log.Info($"Update check complete: {updates} update(s) available, {upToDate} up to date, {errors} error(s).");
 
         ShowToast(updates > 0
             ? $"{updates} update(s) available."
@@ -132,6 +137,9 @@ public partial class InstalledModsViewModel : ViewModelBase
             vm.UpdateStatus = filenameMatch || versionMatch
                 ? UpdateStatus.UpToDate
                 : UpdateStatus.UpdateAvailable;
+
+            if (vm.UpdateStatus == UpdateStatus.UpdateAvailable)
+                Log.Info($"Update available for '{vm.Name}': local={localVersion ?? vm.Mod.Id}, latest={latestVersion} ({latest.FileName}).");
 
             // Keep the latest-file info on the VM so UpdateModCommand has the
             // download URL and target filename ready without a second API call.

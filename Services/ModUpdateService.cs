@@ -52,6 +52,7 @@ public static class ModUpdateService
         // 2. Archive the old file (overwrite a previous backup of the same version).
         var archiveDest = Path.Combine(archiveDir, Path.GetFileName(existingFilePath));
         File.Copy(existingFilePath, archiveDest, overwrite: true);
+        Log.Info($"Archived old mod file to {archiveDest}");
 
         // 3. Install the new file first, then clean up the old one.
         //    This order means a failure in Move leaves the original untouched,
