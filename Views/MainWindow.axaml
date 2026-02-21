@@ -8,6 +8,7 @@
         x:Class="Tempyr.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Title="Tempyr — Hytale Mod Manager"
+        Icon="/Assets/icon.png"
         Width="1100" Height="700"
         MinWidth="800" MinHeight="520"
         Background="#121b25"
@@ -44,12 +45,17 @@
             <DockPanel LastChildFill="False">
 
                 <!-- App header -->
-                <StackPanel DockPanel.Dock="Top" Margin="20,24,20,20">
-                    <TextBlock Text="TEMPYR" FontSize="18" FontWeight="Black"
-                               Foreground="{StaticResource TempyrAccentBrush}"
-                               LetterSpacing="3"/>
-                    <TextBlock Text="Hytale Mod Manager" FontSize="11"
-                               Foreground="#47516b" Margin="0,4,0,0"/>
+                <StackPanel DockPanel.Dock="Top" Margin="20,24,20,20"
+                            Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                    <Image Source="/Assets/icon.png" Width="44" Height="44"
+                           VerticalAlignment="Center" RenderOptions.BitmapInterpolationMode="HighQuality"/>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="TEMPYR" FontSize="18" FontWeight="Black"
+                                   Foreground="{StaticResource TempyrAccentBrush}"
+                                   LetterSpacing="3"/>
+                        <TextBlock Text="Hytale Mod Manager" FontSize="11"
+                                   Foreground="#47516b" Margin="0,4,0,0"/>
+                    </StackPanel>
                 </StackPanel>
 
                 <!-- Nav items -->
