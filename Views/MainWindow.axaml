@@ -40,8 +40,7 @@
     <Grid ColumnDefinitions="210,*">
 
         <!-- Sidebar -->
-        <Border Grid.Column="0" Background="#121b25"
-                BorderBrush="#598ac3" BorderThickness="0,0,1,0">
+        <Border Grid.Column="0" Background="#0e1620">
             <DockPanel LastChildFill="False">
 
                 <!-- App header -->
@@ -96,7 +95,7 @@
         </Border>
 
         <!-- Page content -->
-        <ContentControl Grid.Column="1" Content="{Binding CurrentPage}"/>
+        <ContentControl Grid.Column="1" Background="#121b25" Content="{Binding CurrentPage}"/>
 
     </Grid>
 </Window>

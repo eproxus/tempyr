@@ -16,7 +16,7 @@
 
             <!-- Page header -->
             <Border Grid.Row="0" Padding="24,18,24,18"
-                    BorderBrush="#598ac3"
+                    BorderBrush="#47516b"
                     BorderThickness="0,0,0,1">
                 <Grid ColumnDefinitions="*,Auto">
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">

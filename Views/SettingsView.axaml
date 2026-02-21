@@ -11,7 +11,7 @@
 
         <!-- Header -->
         <Border Grid.Row="0" Padding="24,18,24,18"
-                BorderBrush="#598ac3"
+                BorderBrush="#47516b"
                 BorderThickness="0,0,0,1">
             <TextBlock Text="Settings" FontSize="20" FontWeight="SemiBold"/>
         </Border>
