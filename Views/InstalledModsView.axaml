@@ -28,6 +28,11 @@
                         </TextBlock>
                     </StackPanel>
                     <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                        <Button Command="{Binding OpenModsFolderCommand}"
+                                Background="Transparent" BorderThickness="0"
+                                Padding="8" ToolTip.Tip="Open mods folder">
+                            <mi:MaterialIcon Kind="FolderOpenOutline" Width="15" Height="15" Foreground="#47516b"/>
+                        </Button>
                         <Button Classes="outlined"
                                 Command="{Binding CheckForUpdatesCommand}"
                                 IsEnabled="{Binding !IsCheckingUpdates}"
@@ -39,7 +44,6 @@
                         </Button>
                         <Button Classes="outlined"
                                 Command="{Binding UpdateAllCommand}"
-                                IsEnabled="{Binding !IsCheckingUpdates}"
                                 Padding="14,8">
                             <StackPanel Orientation="Horizontal" Spacing="6">
                                 <mi:MaterialIcon Kind="DownloadMultiple" Width="15" Height="15" VerticalAlignment="Center"/>

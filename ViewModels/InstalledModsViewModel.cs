@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Text.RegularExpressions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -15,7 +16,9 @@ public partial class InstalledModsViewModel : ViewModelBase
     public ObservableCollection<ModItemViewModel> Mods { get; } = [];
 
     [ObservableProperty] private ModItemViewModel? _selectedMod;
-    [ObservableProperty] private bool              _isCheckingUpdates;
+    [ObservableProperty]
+    [NotifyCanExecuteChangedFor(nameof(UpdateAllCommand))]
+    private bool _isCheckingUpdates;
     [ObservableProperty] private string            _toastMessage  = string.Empty;
     [ObservableProperty] private bool              _isToastVisible;
 
@@ -68,7 +71,9 @@ public partial class InstalledModsViewModel : ViewModelBase
         IsCheckingUpdates = false;
     }
 
-    [RelayCommand]
+    private bool CanUpdateAll() => !IsCheckingUpdates && Mods.Any(m => m.HasUpdate);
+
+    [RelayCommand(CanExecute = nameof(CanUpdateAll))]
     private async Task UpdateAll(CancellationToken ct)
     {
         var targets = Mods.Where(m => m.HasUpdate).ToList();
@@ -83,6 +88,8 @@ public partial class InstalledModsViewModel : ViewModelBase
         ShowToast(failed > 0
             ? $"Updated {succeeded}/{targets.Count} mod(s). {failed} failed."
             : $"Successfully updated {succeeded} mod(s).");
+
+        UpdateAllCommand.NotifyCanExecuteChanged();
     }
 
     [RelayCommand]
@@ -147,6 +154,15 @@ public partial class InstalledModsViewModel : ViewModelBase
         var stem  = Path.GetFileNameWithoutExtension(filename);
         var match = FileVersionRegex().Match(stem);
         return match.Success ? match.Groups["ver"].Value : null;
+    }
+
+    [RelayCommand]
+    private void OpenModsFolder()
+    {
+        if (string.IsNullOrWhiteSpace(_installPath)) return;
+        var modsDir = Path.Combine(_installPath, "UserData", "Mods");
+        Directory.CreateDirectory(modsDir);
+        Process.Start(new ProcessStartInfo(modsDir) { UseShellExecute = true });
     }
 
     // ── Install-from-URL overlay ────────────────────────────────────────────
