@@ -72,7 +72,7 @@
                 <!-- Version footer -->
                 <TextBlock DockPanel.Dock="Bottom" Text="v0.1.0-alpha"
                            Foreground="#47516b" FontSize="11"
-                           Margin="20,0,20,16"/>
+                           Margin="20,12,20,16"/>
 
                 <!-- Settings button (bottom) -->
                 <Button Classes="navItem"
