@@ -38,7 +38,8 @@ public static partial class ModLoader
     {
         var manifest = TryReadManifest(filePath);
 
-        // Prefer manifest fields; fall back to filename parsing for name/version.
+        // Prefer filename-parsed version (manifest versions are often placeholders);
+        // fall back to manifest for other fields.
         var (fallbackName, fallbackVersion) = ParseStem(Path.GetFileNameWithoutExtension(filePath));
 
         var authors = manifest?.Authors
@@ -61,7 +62,9 @@ public static partial class ModLoader
         {
             Id                      = Path.GetFileName(filePath),
             Name                    = modName,
-            Version                 = manifest?.Version     ?? fallbackVersion,
+            Version                 = fallbackVersion.Length > 0
+                                        ? fallbackVersion
+                                        : manifest?.Version ?? string.Empty,
             Description             = manifest?.Description ?? string.Empty,
             Website                 = website,
             CurseForgeSlug          = cfSlug,
